@@ -1,27 +1,32 @@
 import streamlit as st
 import tensorflow as tf
 import os
-
-@st.cache_resource
-def load_model():
-    model_path = '/content/drive/My Drive/Final Exam - Emtech 2/cifar10_model.h5'
-    # Debugging print statements
-    if not os.path.exists(model_path):
-        st.error(f"Model file not found at {model_path}")
-        return None
-    model = tf.keras.models.load_model(model_path)
-    return model
-
-model = load_model()
-if model is None:
-    st.stop()
-
-st.write("""# CIFAR10 Detection System""")
-file = st.file_uploader("Insert Image", type=["jpg", "png"])
-
 import cv2
 from PIL import Image, ImageOps
 import numpy as np
+
+# Define the path to the model
+model_path = '/content/drive/My Drive/Final Exam - Emtech 2/cifar10_model.h5'
+
+@st.cache_resource
+def load_model(model_path):
+    # Debugging statement to verify the path
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found at {model_path}")
+        return None
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
+    return model
+
+# Load the model
+model = load_model(model_path)
+if model is None:
+    st.stop()  # Stop execution if the model couldn't be loaded
+
+st.write("# CIFAR10 Detection System")
+
+# File uploader
+file = st.file_uploader("Insert Image", type=["jpg", "png"])
 
 def import_and_predict(image_data, model):
     size = (32, 32)
