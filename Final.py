@@ -1,15 +1,23 @@
 import streamlit as st
 import tensorflow as tf
+import os
 
+@st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model('/content/drive/My Drive/Final Exam - Emtech 2/cifar10_model.h5')
+    model_path = '/content/drive/My Drive/Final Exam - Emtech 2/cifar10_model.h5'
+    # Debugging print statements
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found at {model_path}")
+        return None
+    model = tf.keras.models.load_model(model_path)
     return model
 
 model = load_model()
+if model is None:
+    st.stop()
 
-st.write('# CIFAR10 Detection System')
-
-file = st.file_uploader('Insert Image', type=['jpg', 'png'])
+st.write("""# CIFAR10 Detection System""")
+file = st.file_uploader("Insert Image", type=["jpg", "png"])
 
 import cv2
 from PIL import Image, ImageOps
@@ -24,7 +32,7 @@ def import_and_predict(image_data, model):
     return prediction
 
 if file is None:
-    st.text('Please upload an image file')
+    st.text("Please upload an image file")
 else:
     image = Image.open(file)
     st.image(image, use_column_width=True)
