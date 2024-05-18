@@ -2,7 +2,7 @@ import streamlit as st
 import tensorflow as tf
 
 def load_model():
-    model = tf.keras.models.load_model('/content/drive/My Drive/Final Exam - Emtech 2/cifar10_model.h5')
+    model = tf.keras.models.load_model('cifar10_model.h5')
     return model
 
 model = load_model()
